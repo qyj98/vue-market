@@ -134,6 +134,10 @@ export default {
       ],
     };
   },
+  // ?页面挂载就获取侧边导航数据
+  created() {
+    this.$store.dispatch('getAsideList', this.menuList[0].title);
+  },
   methods: {
     async scrollTo(i, e) {
       if (!this.move) {
@@ -144,6 +148,8 @@ export default {
         const ItemLeft = e.target.getBoundingClientRect().left;
         const disc = ItemLeft + halfItemWidth - halfContainerWidth;
         moveTo(container.scrollLeft, disc, container, 'scrollLeft');
+        // ?切换一级导航重新获取侧边菜单数据
+        this.$store.dispatch('getAsideList', this.menuList[i].title);
       }
     },
   },
