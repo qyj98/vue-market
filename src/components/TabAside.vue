@@ -30,7 +30,7 @@ export default {
   },
   // ?一开始就加载一次商品数据
   mounted() {
-    this.$store.dispatch('getGoodsList', { type: this.tabAsideList[0], sortType: this.sortType });
+    this.$store.dispatch('getGoodsList', { type: this.tabAsideList[0], sort: this.sort });
   },
   methods: {
     async scrollTo(i, e) {
@@ -44,6 +44,7 @@ export default {
         const disc = itemTop + halfItemHeight - containerTop - halfContainerHeight;
         moveTo(container.scrollTop, disc, container, 'scrollTop');
         // 获取商品列表
+        this.$store.commit('resetGoodsList');
         this.$store.dispatch('getGoodsList', { type: this.tabAsideList[i], sort: this.sort });
       }
     },

@@ -11,13 +11,13 @@ async function getTabList(type) {
 }
 
 // 获取商品列表
-async function getGoodsList(type, page, size, sortType) {
+async function getGoodsList(type, page, size, sort) {
   const resp = await request.get('/getGoodsList', {
     params: {
       type,
       page,
       size,
-      sortType,
+      sort,
     },
   });
   return resp;

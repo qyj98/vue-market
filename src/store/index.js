@@ -47,9 +47,9 @@ export default new Vuex.Store({
     // 获取商品列表
     async getGoodsList(ctx, options) {
       const {
-        page = 1, size = 7, sort = 'all',
+        type = ctx.state.type, page = 1, size = 7, sort = ctx.state.sort,
       } = options;
-      const type = options.type || ctx.state.type;
+      // const type = options.type || ctx.state.type;
       const { list } = await api.getGoodsList(type, page, size, sort);
       ctx.commit('setGoodsList', list);
       ctx.commit('setGoodsType', type);
