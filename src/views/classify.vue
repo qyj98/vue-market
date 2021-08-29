@@ -4,12 +4,18 @@
        <van-icon name="search" />
        <div>苹果特价一元一斤</div>
     </div>
+    <Tab1 />
   </div>
 </template>
 
 <script>
+import Tab1 from '../components/Tab1.vue';
 
-export default {};
+export default {
+  components: {
+    Tab1,
+  },
+};
 </script>
 
 <style lang="less" scoped>
