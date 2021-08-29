@@ -9,7 +9,7 @@ export default new Vuex.Store({
     tabAsideList: [], // 侧边栏数据
     isLoading: false,
     goodsList: [], // 商品数据
-    sortType: 'all',
+    sort: 'all',
     type: null,
   },
   mutations: {
@@ -23,7 +23,7 @@ export default new Vuex.Store({
       state.goodsList = [...state.goodsList, ...list];
     },
     setSortType(state, type) {
-      state.sortType = type;
+      state.sort = type;
     },
     setGoodsType(state, type) {
       state.type = type;
@@ -47,10 +47,10 @@ export default new Vuex.Store({
     // 获取商品列表
     async getGoodsList(ctx, options) {
       const {
-        page = 1, size = 7, sortType = 'all',
+        page = 1, size = 7, sort = 'all',
       } = options;
       const type = options.type || ctx.state.type;
-      const { list } = await api.getGoodsList(type, page, size, sortType);
+      const { list } = await api.getGoodsList(type, page, size, sort);
       ctx.commit('setGoodsList', list);
       ctx.commit('setGoodsType', type);
     },

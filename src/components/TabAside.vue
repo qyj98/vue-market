@@ -26,7 +26,7 @@ export default {
   },
   // ?从仓库中获取侧边导航数据
   computed: {
-    ...mapState(['tabAsideList', 'sortType']),
+    ...mapState(['tabAsideList', 'sort']),
   },
   // ?一开始就加载一次商品数据
   mounted() {
@@ -44,7 +44,7 @@ export default {
         const disc = itemTop + halfItemHeight - containerTop - halfContainerHeight;
         moveTo(container.scrollTop, disc, container, 'scrollTop');
         // 获取商品列表
-        this.$store.dispatch('getGoodsList', { type: this.tabAsideList[i], sortType: this.sortType });
+        this.$store.dispatch('getGoodsList', { type: this.tabAsideList[i], sort: this.sort });
       }
     },
   },

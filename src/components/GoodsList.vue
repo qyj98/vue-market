@@ -54,9 +54,9 @@ export default {
     };
   },
   computed: {
-    ...mapState(['sortType', 'goodsList']),
+    ...mapState(['sort', 'goodsList']),
     type() {
-      return this.sortType;
+      return this.sort;
     },
   },
   methods: {
@@ -66,7 +66,7 @@ export default {
       this.finished = false;
       this.loading = false;
       this.$store.commit('resetGoodsList');
-      this.$store.dispatch('getGoodsList', { sortType: this.type });
+      this.$store.dispatch('getGoodsList', { sort: this.type });
       this.isLoading = false;
     },
     onLoad() {},
