@@ -51,6 +51,7 @@ export default {
       isLoading: false,
       loading: false,
       finished: false,
+      page: 1,
     };
   },
   computed: {
@@ -61,7 +62,6 @@ export default {
   },
   methods: {
     onRefresh() {
-      this.page = 1;
       this.isLoading = true;
       this.finished = false;
       this.loading = false;
@@ -69,7 +69,16 @@ export default {
       this.$store.dispatch('getGoodsList', { sort: this.type });
       this.isLoading = false;
     },
-    onLoad() {},
+    async onLoad() {
+      this.loading = true;
+      this.page += 1;
+      const resp = await this.$store.dispatch('getGoodsList', { page: this.page, sortType: this.type });
+      if (resp) {
+        this.loading = false;
+      } else {
+        this.finished = true;
+      }
+    },
     changeType(val) {
       if (val === 'price') {
         if (this.type === 'price-up') {
@@ -80,6 +89,8 @@ export default {
       } else {
         this.$store.dispatch('setSortType', val);
       }
+      this.$store.commit('resetGoodsList');
+      this.$store.dispatch('getGoodsList', { sortType: this.type });
     },
   },
 };
@@ -144,7 +155,7 @@ export default {
   left: 0;
   overflow: auto;
 }
-.van-loading{
+.van-loading {
   top: 10px;
 }
 </style>

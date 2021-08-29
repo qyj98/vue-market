@@ -10,6 +10,7 @@ export default new Vuex.Store({
     isLoading: false,
     goodsList: [], // 商品数据
     sort: 'all',
+    total: 0,
     type: null,
   },
   mutations: {
@@ -27,6 +28,9 @@ export default new Vuex.Store({
     },
     setGoodsType(state, type) {
       state.type = type;
+    },
+    setGoodsTotal(state, total) {
+      state.total = total;
     },
     resetGoodsList(state) {
       state.goodsList = [];
@@ -50,9 +54,14 @@ export default new Vuex.Store({
         type = ctx.state.type, page = 1, size = 7, sort = ctx.state.sort,
       } = options;
       // const type = options.type || ctx.state.type;
-      const { list } = await api.getGoodsList(type, page, size, sort);
+      const { list, total } = await api.getGoodsList(type, page, size, sort);
       ctx.commit('setGoodsList', list);
+      ctx.commit('setGoodsTotal', total);
       ctx.commit('setGoodsType', type);
+      if (total > ctx.state.goodsList.length) {
+        return true;
+      }
+      return false;
     },
   },
   modules: {
