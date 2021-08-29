@@ -18,26 +18,67 @@
         价格
       </div>
     </div>
+    <div class="list-content">
+      <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
+        <van-list
+          v-model="loading"
+          :finished="finished"
+          finished-text="没有了"
+          @load="onLoad"
+          :immediate-check="false"
+        >
+          <goods-card
+            v-for="item in goodsList"
+            :key="item.id"
+            v-bind="item"
+          ></goods-card>
+        </van-list>
+      </van-pull-refresh>
+    </div>
   </div>
 </template>
 
 <script>
+import { mapState } from 'vuex';
+import goodsCard from './GoodsCard.vue';
+
 export default {
+  components: {
+    goodsCard,
+  },
   data() {
     return {
-      type: 'price-up',
+      isLoading: false,
+      loading: false,
+      finished: false,
     };
   },
+  computed: {
+    ...mapState(['sortType', 'goodsList']),
+    type() {
+      return this.sortType;
+    },
+  },
   methods: {
+    onRefresh() {
+      this.page = 1;
+      this.isLoading = true;
+      this.finished = false;
+      this.loading = false;
+      this.$store.commit('resetGoodsList');
+      this.$store.dispatch('getGoodsList', { sortType: this.type });
+      this.isLoading = false;
+    },
+    onLoad() {},
     changeType(val) {
       if (val === 'price') {
         if (this.type === 'price-up') {
-          this.type = 'price-down';
+          this.$store.dispatch('setSortType', 'price-down');
         } else {
-          this.type = 'price-up';
+          this.$store.dispatch('setSortType', 'price-up');
         }
       } else {
-        this.type = val;
+        this.$store.dispatch('setSortType', val);
       }
     },
   },
@@ -95,5 +136,15 @@ export default {
   .price-down::after {
     border-top-color: #ff1a90;
   }
+}
+.list-content {
+  position: relative;
+  width: 296px;
+  height: 455px;
+  left: 0;
+  overflow: auto;
+}
+.van-loading{
+  top: 10px;
 }
 </style>

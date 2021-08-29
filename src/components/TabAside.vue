@@ -26,7 +26,11 @@ export default {
   },
   // ?从仓库中获取侧边导航数据
   computed: {
-    ...mapState(['tabAsideList']),
+    ...mapState(['tabAsideList', 'sortType']),
+  },
+  // ?一开始就加载一次商品数据
+  mounted() {
+    this.$store.dispatch('getGoodsList', { type: this.tabAsideList[0], sortType: this.sortType });
   },
   methods: {
     async scrollTo(i, e) {
@@ -39,6 +43,8 @@ export default {
         const halfContainerHeight = container.offsetHeight / 2;
         const disc = itemTop + halfItemHeight - containerTop - halfContainerHeight;
         moveTo(container.scrollTop, disc, container, 'scrollTop');
+        // 获取商品列表
+        this.$store.dispatch('getGoodsList', { type: this.tabAsideList[i], sortType: this.sortType });
       }
     },
   },

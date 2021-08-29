@@ -9,6 +9,8 @@ export default new Vuex.Store({
     tabAsideList: [], // 侧边栏数据
     isLoading: false,
     goodsList: [], // 商品数据
+    sortType: 'all',
+    type: null,
   },
   mutations: {
     settabAsideList(state, asideList) {
@@ -18,7 +20,16 @@ export default new Vuex.Store({
       state.isLoading = payload;
     },
     setGoodsList(state, list) {
-      state.goodsList = list;
+      state.goodsList = [...state.goodsList, ...list];
+    },
+    setSortType(state, type) {
+      state.sortType = type;
+    },
+    setGoodsType(state, type) {
+      state.type = type;
+    },
+    resetGoodsList(state) {
+      state.goodsList = [];
     },
   },
   actions: {
@@ -29,13 +40,19 @@ export default new Vuex.Store({
       ctx.commit('settabAsideList', resp);
       ctx.commit('setIsLoading', false);
     },
+    // 保存筛选方式
+    setSortType(ctx, type) {
+      ctx.commit('setSortType', type);
+    },
     // 获取商品列表
     async getGoodsList(ctx, options) {
       const {
-        type, page = 1, size = 7, sortType = 'all',
+        page = 1, size = 7, sortType = 'all',
       } = options;
+      const type = options.type || ctx.state.type;
       const { list } = await api.getGoodsList(type, page, size, sortType);
       ctx.commit('setGoodsList', list);
+      ctx.commit('setGoodsType', type);
     },
   },
   modules: {
