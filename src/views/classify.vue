@@ -7,6 +7,7 @@
     <Tab1 />
     <template v-if="!isLoading">
       <TabAside />
+      <GoodsList></GoodsList>
     </template>
     <van-loading v-else-if="isLoading" color="#ff1a90" size="1rem" />
   </div>
@@ -16,11 +17,13 @@
 import { mapState } from 'vuex';
 import Tab1 from '../components/Tab1.vue';
 import TabAside from '../components/TabAside.vue';
+import GoodsList from '../components/GoodsList.vue';
 
 export default {
   components: {
     Tab1,
     TabAside,
+    GoodsList,
   },
   computed: {
     ...mapState(['isLoading']),
