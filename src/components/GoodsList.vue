@@ -1,17 +1,23 @@
 <template>
   <div class="list-container">
     <div class="list-header van-hairline--top-bottom">
-      <div :class="{ active: type === 'all' }" @touchend="changeType('all')">
+      <div
+        :class="{ active: sortType === 'all' }"
+        @touchend="changeType('all')"
+      >
         综合
       </div>
-      <div :class="{ active: type === 'sale' }" @touchend="changeType('sale')">
+      <div
+        :class="{ active: sortType === 'sale' }"
+        @touchend="changeType('sale')"
+      >
         销量
       </div>
       <div
         class="price"
         :class="{
-          'price-up': type === 'price-up',
-          'price-down': type === 'price-down',
+          'price-up': sortType === 'price-up',
+          'price-down': sortType === 'price-down',
         }"
         @touchend="changeType('price')"
       >
@@ -28,8 +34,8 @@
           :immediate-check="false"
         >
           <goods-card
-            v-for="item in goodsList"
-            :key="item.id"
+            v-for="(item, i) in goodsList"
+            :key="i"
             v-bind="item"
           ></goods-card>
         </van-list>
@@ -55,33 +61,45 @@ export default {
     };
   },
   computed: {
-    ...mapState(['sort', 'goodsList']),
-    type() {
+    ...mapState(['sort', 'goodsList', 'type', 'total']),
+    sortType() {
       return this.sort;
     },
   },
+  // created() {
+  //   console.log(this.loading, this.isLoading, this.finished);
+  // },
   methods: {
     onRefresh() {
-      this.isLoading = true;
-      this.finished = false;
-      this.loading = false;
+      console.log(1);
+      this.page = 0;
       this.$store.commit('resetGoodsList');
-      this.$store.dispatch('getGoodsList', { sort: this.type });
+      this.finished = false;
       this.isLoading = false;
+      this.onLoad();
     },
-    async onLoad() {
-      this.loading = true;
-      this.page += 1;
-      const resp = await this.$store.dispatch('getGoodsList', { page: this.page, sortType: this.type });
-      if (resp) {
-        this.loading = false;
-      } else {
-        this.finished = true;
+    // ?滚动到底部加载下一页
+    onLoad() {
+      if (this.finished) {
+        return;
       }
+      this.page += 1;
+      this.loading = true;
+      // ?防抖处理
+      setTimeout(() => {
+        this.$store
+          .dispatch('getGoodsList', { page: this.page, sort: this.sortType })
+          .then(() => {
+            this.loading = false;
+            if (this.goodsList.length >= this.total) {
+              this.finished = true;
+            }
+          });
+      }, 300);
     },
     changeType(val) {
       if (val === 'price') {
-        if (this.type === 'price-up') {
+        if (this.sortType === 'price-up') {
           this.$store.dispatch('setSortType', 'price-down');
         } else {
           this.$store.dispatch('setSortType', 'price-up');
@@ -89,8 +107,35 @@ export default {
       } else {
         this.$store.dispatch('setSortType', val);
       }
+      this.onRefresh();
+    },
+    // async changeType(val) {
+    //   if (val === 'price') {
+    //     if (this.sortType === 'price-up') {
+    //       this.$store.dispatch('setSortType', 'price-down');
+    //     } else {
+    //       this.$store.dispatch('setSortType', 'price-up');
+    //     }
+    //   } else {
+    //     this.$store.dispatch('setSortType', val);
+    //   }
+    //   this.$store.commit('resetGoodsList');
+    //   this.page = 1;
+    //   await this.$store.dispatch('getGoodsList', {
+    //     page: this.page,
+    //     sort: this.sortType,
+    //   });
+    //   this.finished = false;
+    //   this.loading = false;
+    // },
+  },
+  watch: {
+    type() {
+      this.page = 0;
       this.$store.commit('resetGoodsList');
-      this.$store.dispatch('getGoodsList', { sortType: this.type });
+      this.finished = false;
+      this.isLoading = false;
+      this.onLoad();
     },
   },
 };
