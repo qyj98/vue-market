@@ -37,6 +37,8 @@
             v-for="(item, i) in goodsList"
             :key="i"
             v-bind="item"
+            :num="counterMap[item.id]"
+            @goodsNumChange="handleGoodsChange"
           ></goods-card>
         </van-list>
       </van-pull-refresh>
@@ -47,6 +49,7 @@
 <script>
 import { mapState } from 'vuex';
 import goodsCard from './GoodsCard.vue';
+// import { fetch, save } from '../utills/goodsStorage';
 
 export default {
   components: {
@@ -54,29 +57,25 @@ export default {
   },
   data() {
     return {
-      isLoading: false,
+      isLoading: false, // ?是否
       loading: false,
       finished: false,
       page: 1,
     };
   },
   computed: {
-    ...mapState(['sort', 'goodsList', 'type', 'total']),
+    ...mapState(['sort', 'goodsList', 'type', 'total', 'counterMap']),
     sortType() {
       return this.sort;
     },
   },
-  // created() {
-  //   console.log(this.loading, this.isLoading, this.finished);
-  // },
+  created() {
+    console.log(this.counterMap[5]);
+  },
   methods: {
-    onRefresh() {
-      console.log(1);
-      this.page = 0;
-      this.$store.commit('resetGoodsList');
-      this.finished = false;
-      this.isLoading = false;
-      this.onLoad();
+    handleGoodsChange(id, value) {
+      // ?点击加入购物车,给localstorage中添加键值{id: xx, num:1}
+      this.$store.commit('storageChange', { id, value });
     },
     // ?滚动到底部加载下一页
     onLoad() {
@@ -96,6 +95,14 @@ export default {
             }
           });
       }, 300);
+    },
+    onRefresh() {
+      this.page = 0;
+      this.$store.commit('resetGoodsList');
+      this.finished = false;
+      this.isLoading = true;
+      this.onLoad();
+      this.isLoading = false;
     },
     changeType(val) {
       if (val === 'price') {
@@ -137,6 +144,9 @@ export default {
       this.isLoading = false;
       this.onLoad();
     },
+    // counterMap() {
+    //   this.counterMap = fetch();
+    // },
   },
 };
 </script>
@@ -202,5 +212,10 @@ export default {
 }
 .van-loading {
   top: 10px;
+}
+.van-pull-refresh {
+  overflow: visible;
+  -webkit-user-select: none;
+  user-select: none;
 }
 </style>

@@ -4,19 +4,40 @@
       <img :src="images[0]" />
     </div>
     <div class="card-content">
-      <div class="title overflow-hidden">{{title}}</div>
-      <div class="desc overflow-hidden">{{desc}}</div>
+      <div class="title overflow-hidden">{{ title }}</div>
+      <div class="desc overflow-hidden">{{ desc }}</div>
       <div class="tags">
-         <div v-for="i in tags" :key="i">{{ i }}</div>
+        <div v-for="i in tags" :key="i">{{ i }}</div>
       </div>
-      <div class="prices">￥{{price}}</div>
+      <div class="prices">￥{{ price }}</div>
+      <div class="counter">
+        <div class="couterIncreace" v-if="num" @touchend="itemDecreace(id)">
+          <img
+            src="https://duyi-bucket.oss-cn-beijing.aliyuncs.com/img/rec.png"
+          />
+        </div>
+        <div class="num" v-if="num">{{ num }}</div>
+        <div class="couterDecreace" @touchend="itemIncreace(id)">
+          <img
+            src="https://duyi-bucket.oss-cn-beijing.aliyuncs.com/img/add.png"
+          />
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 export default {
-  props: ['images', 'title', 'tags', 'desc', 'price'],
+  props: ['images', 'title', 'tags', 'desc', 'price', 'id', 'num'],
+  methods: {
+    itemIncreace() {
+      this.$emit('goodsNumChange', this.id, 1);
+    },
+    itemDecreace() {
+      this.$emit('goodsNumChange', this.id, -1);
+    },
+  },
 };
 </script>
 
@@ -67,11 +88,27 @@ export default {
       font-weight: bold;
       font-size: 13px;
     }
+    .counter {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      position: absolute;
+      bottom: 10px;
+      div:not(.num) {
+        img {
+          width: 18px;
+        }
+      }
+      .num{
+        font-size: 14px;
+        padding: 0 5px;
+      }
+    }
   }
 }
-.overflow-hidden{
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+.overflow-hidden {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 </style>

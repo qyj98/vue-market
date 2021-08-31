@@ -44,9 +44,6 @@ export default {
         const halfContainerHeight = container.offsetHeight / 2;
         const disc = itemTop + halfItemHeight - containerTop - halfContainerHeight;
         moveTo(container.scrollTop, disc, container, 'scrollTop');
-        // 获取商品列表
-        // this.$store.commit('resetGoodsList');
-        // this.$store.dispatch('getGoodsList', { type: this.tabAsideList[i], sort: this.sort });
         // ?仅保存当前的商品类型,在商品列表处监听watch商品类型变化,变化了就重新加载数据
         this.$store.commit('setGoodsType', this.tabAsideList[i]);
       }

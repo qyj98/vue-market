@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import api from '../api/api';
+import { save } from '../utills/goodsStorage';
 
 Vue.use(Vuex);
 
@@ -12,6 +13,7 @@ export default new Vuex.Store({
     sort: 'all',
     total: 0,
     type: null,
+    counterMap: {}, // ?商品加入购物车数量包含id和num
   },
   mutations: {
     settabAsideList(state, asideList) {
@@ -34,6 +36,23 @@ export default new Vuex.Store({
     },
     resetGoodsList(state) {
       state.goodsList = [];
+    },
+    // ?存储商品加入购物车的数量数据
+    setCounterMap(state, map) {
+      state.counterMap = map;
+    },
+    // ?商品加入购物车的数量数据变动保存在localstorage中
+    storageChange(state, { id, value }) {
+      if (state.counterMap[id]) {
+        if (state.counterMap[id] === 1 && value === -1) {
+          Vue.delete(state.counterMap, id);
+        } else {
+          Vue.set(state.counterMap, id, state.counterMap[id] + value);
+        }
+      } else {
+        Vue.set(state.counterMap, id, 1);
+      }
+      save(state.counterMap);
     },
   },
   actions: {
