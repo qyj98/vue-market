@@ -37,11 +37,11 @@ export default new Vuex.Store({
     resetGoodsList(state) {
       state.goodsList = [];
     },
-    // ?存储商品加入购物车的数量数据
+    // ?将localstorage中的数据保存再仓库中
     setCounterMap(state, map) {
       state.counterMap = map;
     },
-    // ?商品加入购物车的数量数据变动保存在localstorage中
+    // ?仓库中localstorage数据变动后重新保存在localstorage中
     storageChange(state, { id, value }) {
       if (state.counterMap[id]) {
         if (state.counterMap[id] === 1 && value === -1) {

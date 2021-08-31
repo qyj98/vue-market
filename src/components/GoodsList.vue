@@ -69,9 +69,6 @@ export default {
       return this.sort;
     },
   },
-  created() {
-    console.log(this.counterMap[5]);
-  },
   methods: {
     handleGoodsChange(id, value) {
       // ?点击加入购物车,给localstorage中添加键值{id: xx, num:1}

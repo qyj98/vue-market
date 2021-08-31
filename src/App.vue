@@ -8,7 +8,7 @@
 import { fetch } from './utills/goodsStorage';
 
 export default {
-  // ?一开始获取localstorage中的数据
+  // ?一开始获取localstorage中的数据,保存再仓库中
   created() {
     const counterMap = fetch();
     this.$store.commit('setCounterMap', counterMap);
