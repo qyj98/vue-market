@@ -1,6 +1,6 @@
 <template>
   <div class="card-container van-hairline--bottom">
-    <div class="card-img">
+    <div class="card-img"  ref="imgContainer">
       <img :src="images[0]" />
     </div>
     <div class="card-content">
@@ -33,6 +33,8 @@ export default {
   methods: {
     itemIncreace() {
       this.$emit('goodsNumChange', this.id, 1);
+      // ?飞入购物车
+      this.$emit('moveTo', this.images[0], this.$refs.imgContainer);
     },
     itemDecreace() {
       this.$emit('goodsNumChange', this.id, -1);
@@ -46,6 +48,7 @@ export default {
   width: 100%;
   display: flex;
   height: 100px;
+  position: static;
   .card-img {
     width: 90px;
     height: 90px;

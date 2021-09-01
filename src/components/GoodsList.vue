@@ -1,6 +1,6 @@
 <template>
   <div class="list-container">
-    <div class="list-header van-hairline--top-bottom">
+    <div class="list-header van-hairline--top-bottom" ref="header">
       <div
         :class="{ active: sortType === 'all' }"
         @touchend="changeType('all')"
@@ -24,7 +24,7 @@
         价格
       </div>
     </div>
-    <div class="list-content">
+    <div class="list-content" ref="container">
       <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
         <van-list
           v-model="loading"
@@ -39,6 +39,7 @@
             v-bind="item"
             :num="counterMap[item.id]"
             @goodsNumChange="handleGoodsChange"
+            @moveTo="handleMoveTo"
           ></goods-card>
         </van-list>
       </van-pull-refresh>
@@ -49,7 +50,7 @@
 <script>
 import { mapState } from 'vuex';
 import goodsCard from './GoodsCard.vue';
-// import { fetch, save } from '../utills/goodsStorage';
+import moveToShopping from '../utills/moveToShopping';
 
 export default {
   components: {
@@ -71,8 +72,31 @@ export default {
   },
   methods: {
     handleGoodsChange(id, value) {
-      // ?点击加入购物车,给localstorage中添加键值{id: xx, num:1}
+      // ?点击加入购物车,修改仓库中的记录数据counterMap
       this.$store.commit('storageChange', { id, value });
+    },
+    handleMoveTo(img, dom) {
+      const home = document.getElementById('app');
+      console.log(home);
+      const cContainer = this.$refs.container;
+      const imgLeft = dom.offsetLeft;
+      const cTop = this.$refs.container.getBoundingClientRect().top;
+      const headerHeight = this.$refs.header.getBoundingClientRect().height;
+      const imgTop = dom.getBoundingClientRect().top - cTop + headerHeight;
+      const imgHeight = dom.getBoundingClientRect().height;
+      const cHeight = this.$refs.container.getBoundingClientRect().height;
+      const discY = cHeight - imgTop + imgHeight / 2;
+      // 飞入购物车  图片     图片位置      存放的外部容器 移动的距离
+      moveToShopping({
+        img,
+        imgLeft,
+        imgTop,
+        cContainer,
+        discY,
+        callback: () => {
+          console.log('飞入完成');
+        },
+      });
     },
     // ?滚动到底部加载下一页
     onLoad() {
@@ -150,19 +174,29 @@ export default {
 
 <style lang="less" scoped>
 .list-container {
-  position: relative;
-  top: -10.5px;
-  left: 79px;
+  transform: translateY(0);
+  transition: all .3s;
+  position: fixed;
+  border-top: 1px solid #eee;
+  top: 135px;
+  right: 0;
+  width: 296px;
+  bottom: 50px;
+  overflow: auto;
 }
 .list-header {
-  width: 296px;
-  position: relative;
+  position: sticky;
   top: 0;
-  left: 0;
-  box-sizing: border-box;
+  height: 25px;
+  width: 280px;
   padding: 0 8px;
+  margin: 0 auto;
+  border-bottom: 1px solid #eee;
   display: flex;
+  font-size: 12px;
   justify-content: flex-end;
+  z-index: 100;
+  background: #fff;
   > div {
     width: 50px;
     height: 25px;
@@ -201,9 +235,9 @@ export default {
   }
 }
 .list-content {
-  position: relative;
+  // position: relative;
   width: 296px;
-  height: 455px;
+  height: calc(100vh - 160px - 1.33rem);
   left: 0;
   overflow: auto;
 }

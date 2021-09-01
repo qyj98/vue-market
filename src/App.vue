@@ -8,7 +8,7 @@
 import { fetch } from './utills/goodsStorage';
 
 export default {
-  // ?一开始获取localstorage中的数据,保存再仓库中
+  // ?一开始获取localstorage中的数据,保存再仓库中的记录数据
   created() {
     const counterMap = fetch();
     this.$store.commit('setCounterMap', counterMap);
@@ -29,8 +29,8 @@ ul li body {
 a {
     text-decoration: none;
 }
-#app{
-  width: 10rem;
-  height: 10rem;
-}
+// #app{
+//   width: 10rem;
+//   height: 10rem;
+// }
 </style>

@@ -41,7 +41,7 @@ export default new Vuex.Store({
     setCounterMap(state, map) {
       state.counterMap = map;
     },
-    // ?仓库中localstorage数据变动后重新保存在localstorage中
+    // ?修改仓库中记录数据(counterMap)修改后重新保存在localstorage中
     storageChange(state, { id, value }) {
       if (state.counterMap[id]) {
         if (state.counterMap[id] === 1 && value === -1) {
