@@ -1,6 +1,6 @@
 <template>
   <div class="list-container">
-    <div class="list-header van-hairline--top-bottom" ref="header">
+    <div class="list-header" ref="header">
       <div
         :class="{ active: sortType === 'all' }"
         @touchend="changeType('all')"
@@ -58,10 +58,10 @@ export default {
   },
   data() {
     return {
-      isLoading: false, // ?是否
-      loading: false,
-      finished: false,
-      page: 1,
+      isLoading: false, // ?是否下拉刷新中
+      loading: false, // ?是否正在加载下一页数据
+      finished: false, // ?是否已经没有下一页数据了
+      page: 1, // ?当前页码
     };
   },
   computed: {
@@ -75,26 +75,38 @@ export default {
       // ?点击加入购物车,修改仓库中的记录数据counterMap
       this.$store.commit('storageChange', { id, value });
     },
+    // ?飞入购物车
     handleMoveTo(img, dom) {
-      const home = document.getElementById('app');
-      console.log(home);
-      const cContainer = this.$refs.container;
-      const imgLeft = dom.offsetLeft;
-      const cTop = this.$refs.container.getBoundingClientRect().top;
-      const headerHeight = this.$refs.header.getBoundingClientRect().height;
-      const imgTop = dom.getBoundingClientRect().top - cTop + headerHeight;
-      const imgHeight = dom.getBoundingClientRect().height;
-      const cHeight = this.$refs.container.getBoundingClientRect().height;
-      const discY = cHeight - imgTop + imgHeight / 2;
-      // 飞入购物车  图片     图片位置      存放的外部容器 移动的距离
+      // dom要插入的外部容器
+      const outerContainer = document.getElementById('app');
+      const target = document.getElementById('shop-car');
+      // 图片位置宽高
+      const {
+        left: imgLeft,
+        top: imgTop,
+        height: imgHeight,
+        width: imgWidth,
+      } = dom.getBoundingClientRect();
+      // 目标(购物车)位置宽高
+      const {
+        left: carLeft,
+        top: carTop,
+        height: carHeight,
+        width: carWidth,
+      } = target.getBoundingClientRect();
+      // yx方向偏移距离
+      const disY = carTop + carHeight / 2 - imgTop - imgHeight / 2;
+      const disX = carLeft + carWidth / 2 - imgLeft - imgWidth / 2;
       moveToShopping({
         img,
         imgLeft,
         imgTop,
-        cContainer,
-        discY,
+        outerContainer,
+        disY,
+        disX,
         callback: () => {
-          console.log('飞入完成');
+          target.classList.remove('active');
+          // this.$bus.$emit('goodsAdd');
         },
       });
     },
@@ -117,6 +129,7 @@ export default {
           });
       }, 300);
     },
+    // ?下拉刷新
     onRefresh() {
       this.page = 0;
       this.$store.commit('resetGoodsList');
@@ -125,6 +138,7 @@ export default {
       this.onLoad();
       this.isLoading = false;
     },
+    // ?切换商品展示筛选方式,销量,价格升降?
     changeType(val) {
       if (val === 'price') {
         if (this.sortType === 'price-up') {
@@ -157,6 +171,7 @@ export default {
     //   this.loading = false;
     // },
   },
+  // ?切换商品子类目重新加载数据
   watch: {
     type() {
       this.page = 0;
@@ -165,9 +180,6 @@ export default {
       this.isLoading = false;
       this.onLoad();
     },
-    // counterMap() {
-    //   this.counterMap = fetch();
-    // },
   },
 };
 </script>
@@ -175,7 +187,7 @@ export default {
 <style lang="less" scoped>
 .list-container {
   transform: translateY(0);
-  transition: all .3s;
+  transition: all 0.3s;
   position: fixed;
   border-top: 1px solid #eee;
   top: 135px;
@@ -248,5 +260,13 @@ export default {
   overflow: visible;
   -webkit-user-select: none;
   user-select: none;
+}
+.list-container::-webkit-scrollbar {
+  width: 0px;
+  background: none;
+}
+.list-content::-webkit-scrollbar {
+  width: 0px;
+  background: none;
 }
 </style>

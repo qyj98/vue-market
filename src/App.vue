@@ -29,8 +29,8 @@ ul li body {
 a {
     text-decoration: none;
 }
-// #app{
-//   width: 10rem;
-//   height: 10rem;
-// }
+#app{
+  width: 100vw;
+  height: 100vh;
+}
 </style>

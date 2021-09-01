@@ -30,8 +30,29 @@ export default {
       return count;
     },
   },
+  // mounted() {
+  //   this.$bus.$on('goodsAdd', this.handleGoodsAdd);
+  // },
+  // methods: {
+  //   handleGoodsAdd() {
+  //     const shopCar = document.getElementById('shop-car');
+  //     shopCar.style.transform = 'scale(1.1)';
+  //     shopCar.style.color = '#f40';
+  //     setTimeout(() => {
+  //       shopCar.style.transform = 'scale(1)';
+  //       shopCar.style.color = '#000';
+  //     }, 1000);
+  //   },
+  // },
 };
 </script>
 
-<style>
+<style scoped lang='less'>
+#shop-car{
+  transition: all .3s linear .3s;
+}
+.active {
+  transform: scale(1.1);
+  color: #f40;
+}
 </style>
