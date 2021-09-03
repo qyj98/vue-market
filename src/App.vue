@@ -6,12 +6,15 @@
 
 <script>
 import { fetch } from './utills/goodsStorage';
+import { fetchHistory } from './utills/historyStorage';
 
 export default {
   // ?一开始获取localstorage中的数据,保存再仓库中的记录数据
   created() {
     const counterMap = fetch();
+    const history = fetchHistory();
     this.$store.commit('setCounterMap', counterMap);
+    this.$store.commit('setHistory', history);
   },
 };
 </script>

@@ -10,19 +10,19 @@
         <div v-for="i in tags" :key="i">{{ i }}</div>
       </div>
       <div class="prices">￥{{ price }}</div>
-      <div class="counter">
-        <div class="couterIncreace" v-if="num" @touchend="itemDecreace(id)">
+    </div>
+    <div class="counter">
+        <div class="couterDecreace" v-if="num" @touchend="itemDecreace(id)">
           <img
             src="https://duyi-bucket.oss-cn-beijing.aliyuncs.com/img/rec.png"
           />
         </div>
         <div class="num" v-if="num">{{ num }}</div>
-        <div class="couterDecreace" @touchend="itemIncreace(id)">
+        <div class="couterIncreace" @touchend="itemIncreace(id)">
           <img
             src="https://duyi-bucket.oss-cn-beijing.aliyuncs.com/img/add.png"
           />
         </div>
-      </div>
     </div>
   </div>
 </template>
@@ -48,7 +48,7 @@ export default {
   width: 100%;
   display: flex;
   height: 100px;
-  position: static;
+  position: relative;
   .card-img {
     width: 90px;
     height: 90px;
@@ -91,11 +91,13 @@ export default {
       font-weight: bold;
       font-size: 13px;
     }
-    .counter {
+  }
+  .counter {
       display: flex;
+      position: absolute;
       justify-content: flex-end;
       align-items: center;
-      position: absolute;
+      right: 10px;
       bottom: 10px;
       div:not(.num) {
         img {
@@ -107,7 +109,6 @@ export default {
         padding: 0 5px;
       }
     }
-  }
 }
 .overflow-hidden {
   white-space: nowrap;

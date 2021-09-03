@@ -50,7 +50,8 @@
 <script>
 import { mapState } from 'vuex';
 import goodsCard from './GoodsCard.vue';
-import moveToShopping from '../utills/moveToShopping';
+import moveToShop from '../mixin/moveToShop';
+// import moveToShopping from '../utills/moveToShopping';
 
 export default {
   components: {
@@ -70,46 +71,47 @@ export default {
       return this.sort;
     },
   },
+  mixins: [moveToShop()],
   methods: {
-    handleGoodsChange(id, value) {
-      // ?点击加入购物车,修改仓库中的记录数据counterMap
-      this.$store.commit('storageChange', { id, value });
-    },
-    // ?飞入购物车
-    handleMoveTo(img, dom) {
-      // dom要插入的外部容器
-      const outerContainer = document.getElementById('app');
-      const target = document.getElementById('shop-car');
-      // 图片位置宽高
-      const {
-        left: imgLeft,
-        top: imgTop,
-        height: imgHeight,
-        width: imgWidth,
-      } = dom.getBoundingClientRect();
-      // 目标(购物车)位置宽高
-      const {
-        left: carLeft,
-        top: carTop,
-        height: carHeight,
-        width: carWidth,
-      } = target.getBoundingClientRect();
-      // yx方向偏移距离
-      const disY = carTop + carHeight / 2 - imgTop - imgHeight / 2;
-      const disX = carLeft + carWidth / 2 - imgLeft - imgWidth / 2;
-      moveToShopping({
-        img,
-        imgLeft,
-        imgTop,
-        outerContainer,
-        disY,
-        disX,
-        callback: () => {
-          target.classList.remove('active');
-          // this.$bus.$emit('goodsAdd');
-        },
-      });
-    },
+    // // ?点击加入购物车,修改仓库中的记录数据counterMap
+    // handleGoodsChange(id, value) {
+    //   this.$store.commit('storageChange', { id, value });
+    // },
+    // // ?飞入购物车
+    // handleMoveTo(img, dom) {
+    //   // dom要插入的外部容器
+    //   const outerContainer = document.getElementById('app');
+    //   const target = document.getElementById('shop-car');
+    //   // 图片位置宽高
+    //   const {
+    //     left: imgLeft,
+    //     top: imgTop,
+    //     height: imgHeight,
+    //     width: imgWidth,
+    //   } = dom.getBoundingClientRect();
+    //   // 目标(购物车)位置宽高
+    //   const {
+    //     left: carLeft,
+    //     top: carTop,
+    //     height: carHeight,
+    //     width: carWidth,
+    //   } = target.getBoundingClientRect();
+    //   // yx方向偏移距离
+    //   const disY = carTop + carHeight / 2 - imgTop - imgHeight / 2;
+    //   const disX = carLeft + carWidth / 2 - imgLeft - imgWidth / 2;
+    //   moveToShopping({
+    //     img,
+    //     imgLeft,
+    //     imgTop,
+    //     outerContainer,
+    //     disY,
+    //     disX,
+    //     callback: () => {
+    //       target.classList.remove('active');
+    //       // this.$bus.$emit('goodsAdd');
+    //     },
+    //   });
+    // },
     // ?滚动到底部加载下一页
     onLoad() {
       if (this.finished) {
@@ -127,7 +129,7 @@ export default {
               this.finished = true;
             }
           });
-      }, 300);
+      }, 50);
     },
     // ?下拉刷新
     onRefresh() {
@@ -151,25 +153,6 @@ export default {
       }
       this.onRefresh();
     },
-    // async changeType(val) {
-    //   if (val === 'price') {
-    //     if (this.sortType === 'price-up') {
-    //       this.$store.dispatch('setSortType', 'price-down');
-    //     } else {
-    //       this.$store.dispatch('setSortType', 'price-up');
-    //     }
-    //   } else {
-    //     this.$store.dispatch('setSortType', val);
-    //   }
-    //   this.$store.commit('resetGoodsList');
-    //   this.page = 1;
-    //   await this.$store.dispatch('getGoodsList', {
-    //     page: this.page,
-    //     sort: this.sortType,
-    //   });
-    //   this.finished = false;
-    //   this.loading = false;
-    // },
   },
   // ?切换商品子类目重新加载数据
   watch: {

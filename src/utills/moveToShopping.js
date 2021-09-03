@@ -1,27 +1,3 @@
-// import styles from './moveToShopping.module.less';
-
-// function moveToShopping(options = {}) {
-//   const {
-//     img, imgLeft: left, imgTop: top, cContainer: container, discY, callback,
-//   } = options;
-//   const div = document.createElement('div');
-//   div.className = `${styles.goodsImg}`;
-//   div.innerHTML = `<img src="${img}" />`;
-//   container.appendChild(div);
-//   div.style.left = `${left}px`;
-//   div.style.top = `${top}px`;
-//   // 重新渲染
-//   console.log(discY, callback);
-//   // 向右下飘移消失
-//   div.addEventListener('animationend', () => {
-//     console.log('end');
-//     div.remove();
-//     callback();
-//   }, { once: true });
-// }
-
-// export default moveToShopping;
-
 import styles from './moveToShopping.module.less';
 
 function moveToShopping(options = {}) {
@@ -34,6 +10,7 @@ function moveToShopping(options = {}) {
   outerContainer.appendChild(div);
   div.style.left = `${imgLeft}px`;
   div.style.top = `${imgTop}px`;
+  div.style.zIndex = 10;
   const shopCar = document.getElementById('shop-car');
   // ?向右下飘移消失 setTimeout中是动画后的样式, module.less以及上面是初始样式
   setTimeout(() => {

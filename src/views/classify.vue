@@ -2,14 +2,14 @@
   <div class="home-container">
     <div class="search-btn">
        <van-icon name="search" />
-       <div>苹果特价一元一斤</div>
+       <router-link tag="div" :to="{name: 'Search'}">苹果特价一元一斤</router-link>
     </div>
     <Tab1 />
-    <template v-if="!isLoading">
+    <template v-if="!showLoading">
       <TabAside />
       <GoodsList></GoodsList>
     </template>
-    <van-loading v-else-if="isLoading" color="#ff1a90" size="1rem" />
+    <van-loading v-else-if="showLoading" color="#ff1a90" size="1rem" />
   </div>
 </template>
 
@@ -26,7 +26,7 @@ export default {
     GoodsList,
   },
   computed: {
-    ...mapState(['isLoading']),
+    ...mapState(['showLoading']),
   },
 };
 </script>

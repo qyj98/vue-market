@@ -48,10 +48,8 @@ export default {
 </script>
 
 <style scoped lang='less'>
-#shop-car{
-  transition: all .3s linear .3s;
-}
 .active {
+  transition: all .3s ease-out;
   transform: scale(1.1);
   color: #f40;
 }

@@ -23,4 +23,28 @@ async function getGoodsList(type, page, size, sort) {
   return resp;
 }
 
-export default { getTabList, getGoodsList };
+// 模糊搜索
+async function getLikeSearch(likeValue) {
+  const resp = await request.get('/likeSearch', {
+    params: {
+      likeValue,
+    },
+  });
+  return resp;
+}
+
+// 搜索
+async function getSearchList(type, page, size) {
+  const resp = await request.get('/search', {
+    params: {
+      type,
+      page,
+      size,
+    },
+  });
+  return resp;
+}
+
+export default {
+  getTabList, getGoodsList, getLikeSearch, getSearchList,
+};

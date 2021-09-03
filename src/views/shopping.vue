@@ -1,15 +1,28 @@
 <template>
   <div class="home-container">
-    <h1>购物车页面</h1>
+    <van-nav-bar
+      title="购物车"
+      right-text="删除"
+      left-arrow
+      @click-left="onClickLeft"
+      @click-right="onClickRight"
+    />
+    <div>
+      <img src="">
+    </div>
   </div>
 </template>
 
 <script>
 export default {
-
+  methods: {
+    onClickLeft() {
+      this.$router.push({ name: 'Classify' });
+    },
+    onClickRight() {},
+  },
 };
 </script>
 
 <style>
-
 </style>

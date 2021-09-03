@@ -26,7 +26,7 @@ export default {
   },
   // ?从仓库中获取侧边导航数据
   computed: {
-    ...mapState(['tabAsideList', 'sort']),
+    ...mapState(['tabAsideList', 'sort', 'tabName']),
   },
   // ?一开始就加载一次商品数据
   mounted() {
@@ -47,6 +47,11 @@ export default {
         // ?仅保存当前的商品类型,在商品列表处监听watch商品类型变化,变化了就重新加载数据
         this.$store.commit('setGoodsType', this.tabAsideList[i]);
       }
+    },
+  },
+  watch: {
+    tabName() {
+      this.$store.dispatch('getAsideList', this.tabName);
     },
   },
 };

@@ -149,7 +149,9 @@ export default {
         const disc = ItemLeft + halfItemWidth - halfContainerWidth;
         moveTo(container.scrollLeft, disc, container, 'scrollLeft');
         // ?切换一级导航重新获取侧边菜单数据
-        this.$store.dispatch('getAsideList', this.menuList[i].title);
+        // this.$store.dispatch('getAsideList', this.menuList[i].title);
+        // ?切换一级导航保存导航名
+        this.$store.commit('setTabName', this.menuList[i].title);
       }
     },
   },
