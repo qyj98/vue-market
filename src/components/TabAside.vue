@@ -29,10 +29,10 @@ export default {
     ...mapState(['tabAsideList', 'sort', 'tabName']),
   },
   // ?一开始就加载一次商品数据
-  mounted() {
-    this.$store.commit('resetGoodsList');
-    this.$store.dispatch('getGoodsList', { type: this.tabAsideList[0], sort: this.sort });
-  },
+  // mounted() {
+  //   this.$store.commit('resetGoodsList');
+  //   this.$store.dispatch('getGoodsList', { type: this.tabAsideList[0], sort: this.sort });
+  // },
   methods: {
     async scrollTo(i, e) {
       if (!this.move) {
@@ -51,6 +51,7 @@ export default {
   },
   watch: {
     tabName() {
+      console.log(2);
       this.$store.dispatch('getAsideList', this.tabName);
     },
   },

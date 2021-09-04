@@ -2,11 +2,15 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 import Home from '@/views/home.vue';
 
+VueRouter.prototype.back = ''; // ?是否返回上一页
+VueRouter.prototype.goBack = function goBack() {
+  this.go(-1); // ?切换回上次的路由
+};
 Vue.use(VueRouter);
 
 const routes = [
   {
-    path: '/',
+    path: '/home',
     name: 'Home',
     component: Home,
     redirect: { name: 'Classify' },
@@ -31,14 +35,12 @@ const routes = [
   },
   {
     path: '*',
-    redirect: {
-      path: '/',
-    },
+    redirect: { name: 'Classify' },
   },
 ];
 
 const router = new VueRouter({
-  mode: 'history',
+  mode: 'hash',
   base: process.env.BASE_URL,
   routes,
 });

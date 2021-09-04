@@ -1,9 +1,7 @@
 <template>
   <div class="search-container">
     <div class="search-header">
-      <router-link :to="{name: 'Classify'}">
-        <van-icon class="backBtn" name="arrow-left" />
-      </router-link>
+      <van-icon class="backBtn" name="arrow-left" @click="$router.goBack()" />
       <van-search
         class="inpContent"
         v-model.trim="value"
@@ -17,7 +15,11 @@
         <template #action>
           <div @click="onSearch(value)" v-if="showList">搜索</div>
           <div class="shop-car" v-else>
-            <van-icon name="shopping-cart-o" id="shop-car" :badge="badge" />
+            <van-icon
+            name="shopping-cart-o"
+            id="shop-car"
+            :badge="badge"
+            @click="$router.push({name: 'Shopping'})" />
           </div>
         </template>
       </van-search>
@@ -31,25 +33,25 @@
         </van-cell>
       </van-list>
     </div>
-    <div class="search-list" v-if="showSearch">
+    <div class="search-list" v-else>
       <van-list
-          v-model="loading"
-          :finished="finished"
-          finished-text="没有了"
-          @load="onLoad"
-          :immediate-check="false"
-        >
-          <goods-card
-            v-for="item in goodsList"
-            :key="item.id"
-            v-bind="item"
-            :num="counterMap[item.id]"
-            @goodsNumChange="handleGoodsChange"
-            @moveTo="handleMoveTo"
-          ></goods-card>
+        v-model="loading"
+        :finished="finished"
+        finished-text="没有了"
+        @load="onLoad"
+        :immediate-check="false"
+      >
+        <goods-card
+          v-for="item in goodsList"
+          :key="item.id"
+          v-bind="item"
+          :num="counterMap[item.id]"
+          @goodsNumChange="handleGoodsChange"
+          @moveTo="handleMoveTo"
+        ></goods-card>
       </van-list>
     </div>
-    <div class="history" v-if="!showList && !showSearch">
+    <div class="history" v-if="showList && likeList.length === 0">
       <div class="title">历史记录:</div>
       <div class="historyContainer" v-if="searchHsitory.length > 0">
         <div
@@ -57,7 +59,8 @@
           @touchend="onSearch(item.text)"
           v-for="item in searchHsitory"
           :key="item.id"
-          >{{item.text}}
+        >
+          {{ item.text }}
         </div>
       </div>
     </div>
@@ -79,8 +82,7 @@ export default {
       value: '',
       place: '酒',
       timer: null,
-      showList: false,
-      showSearch: false,
+      showList: true,
       finished: false,
       loading: false,
       likeList: [],
@@ -110,13 +112,16 @@ export default {
   methods: {
     // ?输入时模糊搜素,防抖处理(输入关键字后如果'正在请求中'||'输入空白'就停止请求远程数据并初始化)
     async input(value) {
-      this.showSearch = false;
-      if (this.timer || !value) {
+      if (!value) {
+        // this.showList = false;
+        this.likeList = [];
+        this.goodsList = [];
+      } else if (this.timer) {
         clearTimeout(this.timer);
+        this.showList = false;
         this.timer = null;
         this.likeList = [];
         this.goodsList = [];
-        this.showList = false;
       } else {
         this.showList = true;
         this.value = value;
@@ -131,8 +136,6 @@ export default {
     // ?聚焦就模糊搜素
     onfocus() {
       this.showList = true;
-      this.showSearch = false;
-      this.input(this.value);
     },
     // ?匹配关键字更改颜色
     formatHTML(item) {
@@ -154,7 +157,6 @@ export default {
       }
       // 每次搜索初始化,
       this.showList = false;
-      this.showSearch = true;
       this.page = 0;
       this.goodsList = [];
       this.finished = false;
@@ -167,12 +169,15 @@ export default {
       }
       this.page += 1;
       this.loading = true;
-      const { list, total } = await this.$api.getSearchList(this.value, this.page, 5);
+      const { list, total } = await this.$api.getSearchList(
+        this.value,
+        this.page,
+        5,
+      );
       this.goodsList = [...this.goodsList, ...list];
       this.total = total;
       if (this.goodsList.length < this.total) {
         this.loading = false;
-        this.showSearch = true;
       } else {
         this.finished = true;
       }
@@ -186,6 +191,7 @@ export default {
   width: 100%;
   height: 100vh;
   background: #fff;
+  z-index: 10;
   .search-header {
     position: fixed;
     display: flex;
@@ -200,14 +206,14 @@ export default {
     }
     .inpContent {
       flex: 1;
-      .shop-car{
+      .shop-car {
         display: flex;
         align-items: center;
-        #shop-car{
+        #shop-car {
           font-size: 20px;
         }
-        .active{
-          transition: all .3s ease-out;
+        .active {
+          transition: all 0.3s ease-out;
           transform: scale(1.1);
           color: #f40;
         }
@@ -223,29 +229,29 @@ export default {
     background: #fff;
     z-index: 10;
   }
-  .search-list{
+  .search-list {
     position: relative;
     width: 350px;
     margin: 48px auto 0;
     background: #fff;
     z-index: 10;
   }
-  .history{
+  .history {
     position: absolute;
     width: 345px;
     top: 80px;
     left: 50%;
     transform: translateX(-50%);
-    .title{
+    .title {
       font-size: 14px;
       font-weight: bold;
     }
-    .historyContainer{
+    .historyContainer {
       display: flex;
       margin-top: 20px;
       margin-left: 10px;
       flex-wrap: wrap;
-      .history-item{
+      .history-item {
         padding: 15px;
         margin: 0 0 10px 10px;
         background: #eee;

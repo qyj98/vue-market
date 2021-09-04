@@ -26,7 +26,16 @@ export default {
     GoodsList,
   },
   computed: {
-    ...mapState(['showLoading']),
+    ...mapState(['showLoading', 'tabAsideList']),
+  },
+  watch: {
+    // ?防止获取多次商品列表数据，导致v-for的key值重复
+    showLoading() {
+      if (!this.showLoading) {
+        this.$store.commit('resetGoodsList');
+        this.$store.dispatch('getGoodsList', { type: this.tabAsideList[0], sort: 'all' });
+      }
+    },
   },
 };
 </script>

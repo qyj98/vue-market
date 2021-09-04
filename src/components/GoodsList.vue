@@ -34,8 +34,8 @@
           :immediate-check="false"
         >
           <goods-card
-            v-for="(item, i) in goodsList"
-            :key="i"
+            v-for="item in goodsList"
+            :key="item.id"
             v-bind="item"
             :num="counterMap[item.id]"
             @goodsNumChange="handleGoodsChange"

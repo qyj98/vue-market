@@ -4,7 +4,7 @@
       title="购物车"
       right-text="删除"
       left-arrow
-      @click-left="onClickLeft"
+      @click-left="$router.go(-1)"
       @click-right="onClickRight"
     />
     <div>
@@ -16,9 +16,6 @@
 <script>
 export default {
   methods: {
-    onClickLeft() {
-      this.$router.push({ name: 'Classify' });
-    },
     onClickRight() {},
   },
 };
