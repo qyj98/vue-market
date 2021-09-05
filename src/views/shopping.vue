@@ -47,7 +47,6 @@ import { mapState } from 'vuex';
 import { Dialog, Toast } from 'vant';
 import GoodsCard from '../components/GoodsCard.vue';
 import moveToShop from '../mixin/moveToShop';
-// import moveToShopping from '../utills/moveToShopping';
 
 export default {
   components: {

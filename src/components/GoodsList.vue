@@ -75,15 +75,8 @@ export default {
   methods: {
     // ?点击加入购物车,修改仓库中的记录数据counterMap
     handleGoodsChange(id, value) {
-      // const selectedGoods = goodsList.find((item) => item.id === id);
-      // this.$store.commit('setSelectedGoods', selectedGoods);
       this.$store.commit('storageChange', { id, value });
     },
-    // handleGoodsChange(id, value) {
-    //   const selectedGoods = goodsList.find(item => item.id === id)
-    //   this.$store.commit('storageChange', { id, value });
-    //   this.$store.commit('setSelectedGoods', selectedGoods)
-    // },
     // // ?飞入购物车
     // handleMoveTo(img, dom) {
     //   // dom要插入的外部容器

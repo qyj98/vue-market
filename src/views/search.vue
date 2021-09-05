@@ -150,15 +150,11 @@ export default {
     },
     // ?点击精确搜索
     onSearch(value) {
-      if (value) {
-        this.value = value;
-        this.sHistory.id = generateId();
-        this.sHistory.text = this.value;
-        this.$store.commit('historyAdd', this.sHistory);
-        this.sHistory = {};
-      } else {
-        this.value = this.place;
-      }
+      this.value = value || this.place;
+      this.sHistory.id = generateId();
+      this.sHistory.text = this.value;
+      this.$store.commit('historyAdd', this.sHistory);
+      this.sHistory = {};
       // 每次搜索初始化,
       this.showList = false;
       this.page = 0;
