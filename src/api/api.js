@@ -45,6 +45,16 @@ async function getSearchList(type, page, size) {
   return resp;
 }
 
+// 根据id获取产品
+async function getGoodsByIds(value) {
+  const resp = await request.get('/getGoodsByIds', {
+    params: {
+      value,
+    },
+  });
+  return resp;
+}
+
 export default {
-  getTabList, getGoodsList, getLikeSearch, getSearchList,
+  getTabList, getGoodsList, getLikeSearch, getSearchList, getGoodsByIds,
 };

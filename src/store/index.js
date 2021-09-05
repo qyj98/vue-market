@@ -17,6 +17,7 @@ export default new Vuex.Store({
     type: null,
     counterMap: {}, // ?商品加入购物车数量包含id和num
     searchHsitory: [],
+    selectedGoods: [],
   },
   mutations: {
     settabAsideList(state, asideList) {
@@ -63,6 +64,10 @@ export default new Vuex.Store({
       }
       save(state.counterMap);
     },
+    deleteStorageItem(state, id) {
+      Vue.delete(state.counterMap, id);
+      save(state.counterMap);
+    },
     // ?添加搜索历史
     historyAdd(state, obj) {
       // 重复的搜索历史就遍历删掉旧的，新的添加在数组前面，超出限定数量的就删除数组最后的数据
@@ -76,6 +81,9 @@ export default new Vuex.Store({
         state.searchHsitory.splice(10, 1);
       }
       saveHistory(state.searchHsitory);
+    },
+    setSelectedGoods(state, obj) {
+      state.selectedGoods.unshift(obj);
     },
   },
   actions: {

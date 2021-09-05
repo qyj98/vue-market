@@ -4,10 +4,6 @@ import moveToShopping from '../utills/moveToShopping';
 export default function () {
   return {
     methods: {
-      // ?点击加入购物车,修改仓库中的记录数据counterMap
-      handleGoodsChange(id, value) {
-        this.$store.commit('storageChange', { id, value });
-      },
       // ?飞入购物车
       handleMoveTo(img, dom) {
         // dom要插入的外部容器

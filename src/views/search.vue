@@ -110,6 +110,10 @@ export default {
   },
   mixins: [moveToShop()],
   methods: {
+    // ?点击加入购物车,修改仓库中的记录数据counterMap
+    handleGoodsChange(id, value) {
+      this.$store.commit('storageChange', { id, value });
+    },
     // ?输入时模糊搜素,防抖处理(输入关键字后如果'正在请求中'||'输入空白'就停止请求远程数据并初始化)
     async input(value) {
       if (!value) {
@@ -196,10 +200,12 @@ export default {
     position: fixed;
     display: flex;
     top: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 345px;
+    box-sizing: border-box;
+    background: #fff;
+    padding: 0 20px;
+    width: 100%;
     align-items: center;
+    z-index: 20;
     justify-content: space-between;
     .backBtn {
       font-size: 22px;

@@ -33,14 +33,14 @@
           @load="onLoad"
           :immediate-check="false"
         >
-          <goods-card
-            v-for="item in goodsList"
-            :key="item.id"
-            v-bind="item"
-            :num="counterMap[item.id]"
-            @goodsNumChange="handleGoodsChange"
-            @moveTo="handleMoveTo"
-          ></goods-card>
+        <goods-card
+        v-for="item in goodsList"
+        :key="item.id"
+        v-bind="item"
+        :num="counterMap[item.id]"
+        @goodsNumChange="handleGoodsChange"
+        @moveTo="handleMoveTo"
+      ></goods-card>
         </van-list>
       </van-pull-refresh>
     </div>
@@ -73,9 +73,16 @@ export default {
   },
   mixins: [moveToShop()],
   methods: {
-    // // ?点击加入购物车,修改仓库中的记录数据counterMap
+    // ?点击加入购物车,修改仓库中的记录数据counterMap
+    handleGoodsChange(id, value) {
+      // const selectedGoods = goodsList.find((item) => item.id === id);
+      // this.$store.commit('setSelectedGoods', selectedGoods);
+      this.$store.commit('storageChange', { id, value });
+    },
     // handleGoodsChange(id, value) {
+    //   const selectedGoods = goodsList.find(item => item.id === id)
     //   this.$store.commit('storageChange', { id, value });
+    //   this.$store.commit('setSelectedGoods', selectedGoods)
     // },
     // // ?飞入购物车
     // handleMoveTo(img, dom) {
